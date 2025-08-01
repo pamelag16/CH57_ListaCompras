@@ -103,8 +103,6 @@ if(! validarCantidad()){
         };
 
         localStorage.setItem("resumen", JSON.stringify(resumen));
-
-
         txtName.value = "";
         txtNumber.value = "";
         txtName.focus();
@@ -114,6 +112,66 @@ if(! validarCantidad()){
     //Tenga información
     //Tiene que ser un número
     // Mayor que 0
-
-
 })//btnAgregar click
+
+window.addEventListener("load", function(event){
+    event.preventDefault();
+
+    if (this.localStorage.getItem("datos")!=null){
+        datos = JSON.parse(this.localStorage.getItem("datos"));
+        datos.forEach((dato) => {
+            let row = `<tr>
+                    <td>${dato.cont}</td>
+                    <td>${dato.nombre}</td>
+                    <td>${dato.cantidad}</td>
+                    <td>${dato.precio}</td>
+                </tr>
+                `;
+                cuerpoTabla.insertAdjacentHTML("beforeend", row);
+        }); //foreach
+
+    }//datos != null
+    if (this.localStorage.getItem("resumen")!=null){
+        let resumen = JSON.parse(this.localStorage.getItem("resumen"));
+        costoTotal = resumen.costoTotal;
+        totalEnProductos = resumen.totalEnProductos;
+        cont = resumen.cont;
+    }//resumen !null
+
+    contadorProductos.innerText = cont;
+    productosTotal.innerText = totalEnProductos;
+    precioTotal.innerText = new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" }).format(costoTotal);
+
+})// window load
+
+
+btnClear.addEventListener("click", function(event){
+    event.preventDefault();
+    //1. Eliminar el localStorage
+    localStorage.removeItem("datos");
+    localStorage.removeItem("resumen");
+    //2. Limpiar la tabla
+    cuerpoTabla.innerHTML="";
+    //3. Limpiar los campos
+    txtName.value = "";
+    txtNumber.value = "";
+    txtName.focus();
+    //4. Limpiar el borde de los campos
+    txtName.style.border="";
+    txtNumber.style.border="";
+    //5. Limpiar los alerts
+    alertValidacionesTexto.innerHTML="";
+    alertValidaciones.style.display="none";
+    //6. Limpiar el resumen
+    cont = 0;
+    totalEnProductos = 0;
+    costoTotal = 0;
+
+    contadorProductos.innerText = cont;
+    productosTotal.innerText = totalEnProductos;
+    precioTotal.innerText = new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" }).format(costoTotal);
+    datos = new Array();
+});//Limpiar todo
+
+
+
