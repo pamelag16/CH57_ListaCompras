@@ -17,6 +17,9 @@ let cont = 0;
 let totalEnProductos = 0;
 let costoTotal = 0;
 
+//[]; puede ser con esta opción también
+let datos = new Array();
+
 
 function validarCantidad(){
     if (txtNumber.value.length==0){
@@ -75,6 +78,15 @@ if(! validarCantidad()){
                 </tr>
                 `;
 
+        let elemento = {
+            "cont" : cont,
+            "nombre" : txtName.value,
+            "cantidad" : txtNumber.value,
+            "precio" : precio
+        };
+
+        datos.push(elemento);
+        localStorage.setItem("datos", JSON.stringify(datos));
         cuerpoTabla.insertAdjacentHTML("beforeend", row);
         contadorProductos.innerText = cont;
         totalEnProductos += Number(txtNumber.value);
@@ -83,6 +95,16 @@ if(! validarCantidad()){
         //costoTotal.toFixed(2) // forma fácil
         // precioTotal.innerText = "$ " + costoTotal.toFixed(2);
         precioTotal.innerText = new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" }).format(costoTotal);
+
+        let resumen = {
+                "cont" : cont,
+                "totalEnProductos" : totalEnProductos,
+                "costoTotal" : costoTotal
+        };
+
+        localStorage.setItem("resumen", JSON.stringify(resumen));
+
+
         txtName.value = "";
         txtNumber.value = "";
         txtName.focus();
